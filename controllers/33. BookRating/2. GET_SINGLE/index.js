@@ -1,0 +1,34 @@
+const { storeSingleData } = require("../../../services/controllerService");
+
+const GET_SINGLE_BOOK_RATING = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (!id || isNaN(id)) {
+            return res.status(400).json({
+                success: false,
+                data: null,
+                message: 'Мэдээлэл буруу эсвэл дутуу байна.'
+            });
+        }
+
+        const where = { id: parseInt(id) };
+       
+        const include = {};
+
+        return await storeSingleData(res, 'book_rating', {
+            where,
+            include
+        });
+
+    } catch (err) {
+
+        return res.status(500).json({
+            success: false,
+            data: null,
+            message: 'Серверийн алдаа гарлаа.' + err
+        });
+    }
+};
+
+module.exports = GET_SINGLE_BOOK_RATING;
