@@ -1,0 +1,414 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model first_unit {
+  id                                                     BigInt            @id @default(autoincrement())
+  name                                                   String?
+  second_unit_second_unit_first_unitTofirst_unit         second_unit[]     @relation("second_unit_first_unitTofirst_unit")
+  user_first_unit_user_first_unit_first_unitTofirst_unit user_first_unit[] @relation("user_first_unit_first_unitTofirst_unit")
+}
+
+model fourth_unit {
+  id                                                         BigInt             @id @default(autoincrement())
+  third_unit                                                 BigInt?
+  name                                                       String?
+  third_unit_fourth_unit_third_unitTothird_unit              third_unit?        @relation("fourth_unit_third_unitTothird_unit", fields: [third_unit], references: [id], onDelete: Cascade, map: "third_unit")
+  user_fourth_unit_user_fourth_unit_fourth_unitTofourth_unit user_fourth_unit[] @relation("user_fourth_unit_fourth_unitTofourth_unit")
+}
+
+model lesson {
+  id                                               BigInt             @id @default(autoincrement())
+  category                                         BigInt?
+  title                                            String?
+  instructor                                       String?
+  time                                             Int?               @db.SmallInt
+  description                                      String?
+  image                                            String?
+  lesson_category                                  lesson_category?   @relation(fields: [category], references: [id], onDelete: Cascade, map: "category")
+  lesson_content_lesson_content_lessonTolesson     lesson_content[]   @relation("lesson_content_lessonTolesson")
+  lesson_rating_lesson_rating_lessonTolesson       lesson_rating[]    @relation("lesson_rating_lessonTolesson")
+  lesson_visiblity_lesson_visiblity_lessonTolesson lesson_visiblity[] @relation("lesson_visiblity_lessonTolesson")
+}
+
+model lesson_category {
+  id     BigInt   @id @default(autoincrement())
+  name   String?
+  lesson lesson[]
+}
+
+model lesson_content {
+  id                                   BigInt                         @id @default(autoincrement())
+  lesson                               BigInt?
+  index                                BigInt?
+  title                                String?
+  lesson_lesson_content_lessonTolesson lesson?                        @relation("lesson_content_lessonTolesson", fields: [lesson], references: [id], onDelete: Cascade, map: "lesson")
+  lesson_content_image                 lesson_content_image[]
+  lesson_content_pdf                   lesson_content_pdf[]
+  lesson_content_test                  lesson_content_test[]
+  lesson_content_video                 lesson_content_video[]
+  user_lesson_content_progress         user_lesson_content_progress[]
+}
+
+model lesson_content_image {
+  id             BigInt          @id @default(autoincrement())
+  content        BigInt?
+  file           String?
+  alt            String?
+  title          String?
+  lesson_content lesson_content? @relation(fields: [content], references: [id], onDelete: Cascade, map: "content")
+}
+
+model lesson_content_pdf {
+  id             BigInt          @id @default(autoincrement())
+  content        BigInt?
+  file           String?
+  lesson_content lesson_content? @relation(fields: [content], references: [id], onDelete: Cascade, map: "content")
+}
+
+model lesson_content_video {
+  id             BigInt          @id @default(autoincrement())
+  content        BigInt?
+  video          String?
+  lesson_content lesson_content? @relation(fields: [content], references: [id], onDelete: Cascade, map: "content")
+}
+
+model lesson_visiblity {
+  id                                     BigInt  @id @default(autoincrement())
+  lesson                                 BigInt?
+  target                                 String?
+  requirement                            BigInt?
+  lesson_lesson_visiblity_lessonTolesson lesson? @relation("lesson_visiblity_lessonTolesson", fields: [lesson], references: [id], onDelete: Cascade, map: "lesson")
+}
+
+model module_permissions {
+  id           BigInt         @id @default(autoincrement())
+  module       BigInt?
+  permission   BigInt?
+  modules      modules?       @relation(fields: [module], references: [id], onDelete: Cascade, map: "module")
+  permissions  permissions?   @relation(fields: [permission], references: [id], onDelete: Cascade, map: "permission")
+  user_modules user_modules[]
+}
+
+model modules {
+  id                 BigInt               @id @default(autoincrement())
+  code               String?
+  name               String?
+  isvisible          Boolean?
+  module_permissions module_permissions[]
+}
+
+model permissions {
+  id                 BigInt               @id @default(autoincrement())
+  code               String?
+  name               String?
+  module_permissions module_permissions[]
+}
+
+model positions {
+  id             BigInt           @id(map: "name_pkey") @default(autoincrement())
+  name           String?
+  user_positions user_positions[]
+}
+
+model rank {
+  id                             BigInt      @id @default(autoincrement())
+  name                           String?
+  user_rank_user_rank_rankTorank user_rank[] @relation("user_rank_rankTorank")
+}
+
+model second_unit {
+  id                                                         BigInt             @id @default(autoincrement())
+  first_unit                                                 BigInt?
+  name                                                       String?
+  first_unit_second_unit_first_unitTofirst_unit              first_unit?        @relation("second_unit_first_unitTofirst_unit", fields: [first_unit], references: [id], onDelete: Cascade, map: "first_unit")
+  third_unit_third_unit_second_unitTosecond_unit             third_unit[]       @relation("third_unit_second_unitTosecond_unit")
+  user_second_unit_user_second_unit_second_unitTosecond_unit user_second_unit[] @relation("user_second_unit_second_unitTosecond_unit")
+}
+
+model third_unit {
+  id                                                     BigInt            @id @default(autoincrement())
+  second_unit                                            BigInt?
+  name                                                   String?
+  fourth_unit_fourth_unit_third_unitTothird_unit         fourth_unit[]     @relation("fourth_unit_third_unitTothird_unit")
+  second_unit_third_unit_second_unitTosecond_unit        second_unit?      @relation("third_unit_second_unitTosecond_unit", fields: [second_unit], references: [id], onDelete: Cascade, map: "second_unit")
+  user_third_unit_user_third_unit_third_unitTothird_unit user_third_unit[] @relation("user_third_unit_third_unitTothird_unit")
+}
+
+model user_first_unit {
+  id                                                BigInt      @id @default(autoincrement())
+  user                                              BigInt?
+  first_unit                                        BigInt?
+  date                                              DateTime?   @db.Timestamp(6)
+  first_unit_user_first_unit_first_unitTofirst_unit first_unit? @relation("user_first_unit_first_unitTofirst_unit", fields: [first_unit], references: [id], onDelete: Cascade, map: "first_unit")
+  users                                             users?      @relation(fields: [user], references: [id], onDelete: Cascade, map: "user")
+}
+
+model user_fourth_unit {
+  id                                                    BigInt       @id @default(autoincrement())
+  user                                                  BigInt?
+  fourth_unit                                           BigInt?
+  date                                                  DateTime?    @db.Timestamp(6)
+  fourth_unit_user_fourth_unit_fourth_unitTofourth_unit fourth_unit? @relation("user_fourth_unit_fourth_unitTofourth_unit", fields: [fourth_unit], references: [id], onDelete: Cascade, map: "fourth_unit")
+  users                                                 users?       @relation(fields: [user], references: [id], onDelete: Cascade, map: "user")
+}
+
+model user_modules {
+  id                 BigInt              @id @default(autoincrement())
+  user               BigInt?
+  module_permission  BigInt?
+  module_permissions module_permissions? @relation(fields: [module_permission], references: [id], onDelete: Cascade, map: "module_permission")
+  users              users?              @relation(fields: [user], references: [id], onDelete: Cascade, map: "user")
+}
+
+model user_positions {
+  id        BigInt     @id @default(autoincrement())
+  user      BigInt?
+  position  BigInt?
+  date      DateTime?  @db.Timestamp(6)
+  note      String?
+  positions positions? @relation(fields: [position], references: [id], onDelete: Cascade, map: "position")
+  users     users?     @relation(fields: [user], references: [id], onDelete: Cascade, map: "user")
+}
+
+model user_rank {
+  id                        BigInt    @id @default(autoincrement())
+  user                      BigInt?
+  rank                      BigInt?
+  date                      DateTime? @db.Timestamp(6)
+  rank_user_rank_rankTorank rank?     @relation("user_rank_rankTorank", fields: [rank], references: [id], onDelete: Cascade, map: "rank")
+  users                     users?    @relation(fields: [user], references: [id], onDelete: Cascade, map: "user")
+}
+
+model user_second_unit {
+  id                                                    BigInt       @id @default(autoincrement())
+  user                                                  BigInt?
+  second_unit                                           BigInt?
+  date                                                  DateTime?    @db.Timestamp(6)
+  second_unit_user_second_unit_second_unitTosecond_unit second_unit? @relation("user_second_unit_second_unitTosecond_unit", fields: [second_unit], references: [id], onDelete: Cascade, map: "second_unit")
+  users                                                 users?       @relation(fields: [user], references: [id], onDelete: Cascade, map: "user")
+}
+
+model user_third_unit {
+  id                                                BigInt      @id @default(autoincrement())
+  user                                              BigInt?
+  third_unit                                        BigInt?
+  date                                              DateTime?   @db.Timestamp(6)
+  third_unit_user_third_unit_third_unitTothird_unit third_unit? @relation("user_third_unit_third_unitTothird_unit", fields: [third_unit], references: [id], onDelete: Cascade, map: "third_unit")
+  users                                             users?      @relation(fields: [user], references: [id], onDelete: Cascade, map: "user")
+}
+
+model users {
+  id                               BigInt                             @id @default(autoincrement())
+  firstname                        String?
+  lastname                         String?
+  phone                            String?
+  kode                             String?
+  password                         String?
+  date                             DateTime?                          @db.Timestamp(6)
+  book_rating                      book_rating[]
+  lesson_rating                    lesson_rating[]
+  news                             news[]
+  user_book_progress               user_book_progress[]
+  user_first_unit                  user_first_unit[]
+  user_fourth_unit                 user_fourth_unit[]
+  user_lesson_content_progress     user_lesson_content_progress[]
+  user_lesson_content_test_answers user_lesson_content_test_answers[]
+  user_modules                     user_modules[]
+  user_positions                   user_positions[]
+  user_rank                        user_rank[]
+  user_second_unit                 user_second_unit[]
+  user_third_unit                  user_third_unit[]
+}
+
+model lesson_rating {
+  id                                  BigInt  @id @default(autoincrement())
+  lesson                              BigInt?
+  user                                BigInt?
+  title                               String?
+  content                             String?
+  rating                              Int?    @db.SmallInt
+  lesson_lesson_rating_lessonTolesson lesson? @relation("lesson_rating_lessonTolesson", fields: [lesson], references: [id], onDelete: Cascade, map: "lesson")
+  users                               users?  @relation(fields: [user], references: [id], onDelete: Cascade, map: "user")
+}
+
+model user_lesson_content_progress {
+  id             BigInt          @id @default(autoincrement())
+  user           BigInt?
+  content        BigInt?
+  progress       BigInt?
+  completed      Boolean?
+  created_at     DateTime?       @db.Timestamp(6)
+  updated_at     DateTime?       @db.Timestamp(6)
+  lesson_content lesson_content? @relation(fields: [content], references: [id], onDelete: Cascade, map: "content")
+  users          users?          @relation(fields: [user], references: [id], onDelete: Cascade, map: "user")
+}
+
+model test_category {
+  id   BigInt  @id @default(autoincrement())
+  name String?
+  test test[]
+}
+
+model test {
+  id                                                 BigInt                @id @default(autoincrement())
+  name                                               String?
+  img                                                String?
+  category                                           BigInt?
+  lesson_content_test_lesson_content_test_testTotest lesson_content_test[] @relation("lesson_content_test_testTotest")
+  test_category                                      test_category?        @relation(fields: [category], references: [id], onDelete: Cascade, map: "category")
+  test_answers_test_answers_testTotest               test_answers[]        @relation("test_answers_testTotest")
+}
+
+model test_answers {
+  id                           BigInt   @id @default(autoincrement())
+  test                         BigInt?
+  title                        String?
+  isSuccess                    Boolean?
+  test_test_answers_testTotest test?    @relation("test_answers_testTotest", fields: [test], references: [id], onDelete: Cascade, map: "test")
+}
+
+model lesson_content_test {
+  id                                  BigInt                             @id @default(autoincrement())
+  content                             BigInt?
+  test                                BigInt?
+  lesson_content                      lesson_content?                    @relation(fields: [content], references: [id], onDelete: Cascade, map: "content")
+  test_lesson_content_test_testTotest test?                              @relation("lesson_content_test_testTotest", fields: [test], references: [id], onDelete: Cascade, map: "test")
+  user_lesson_content_test_answers    user_lesson_content_test_answers[]
+}
+
+model news {
+  id                                       BigInt           @id @default(autoincrement())
+  category                                 BigInt?
+  user                                     BigInt?
+  title                                    String?
+  description                              String?
+  image                                    String?
+  created_at                               DateTime?        @db.Timestamp(6)
+  feature                                  Boolean?
+  news_category                            news_category?   @relation(fields: [category], references: [id], onDelete: Cascade, map: "category")
+  users                                    users?           @relation(fields: [user], references: [id], onDelete: Cascade, map: "user")
+  news_visiblity_news_visiblity_newsTonews news_visiblity[] @relation("news_visiblity_newsTonews")
+}
+
+model news_category {
+  id   BigInt  @id @default(autoincrement())
+  name String?
+  news news[]
+}
+
+model user_lesson_content_test_answers {
+  id                  BigInt               @id @default(autoincrement())
+  user                BigInt?
+  content_test        BigInt?
+  user_answer         BigInt?
+  success             Boolean?
+  lesson_content_test lesson_content_test? @relation(fields: [content_test], references: [id], onDelete: Cascade, map: "content_test")
+  users               users?               @relation(fields: [user], references: [id], onDelete: Cascade, map: "user")
+}
+
+model notification {
+  id                                                                         BigInt                    @id @default(autoincrement())
+  title                                                                      String?
+  contet                                                                     String?
+  date                                                                       DateTime?                 @db.Timestamp(6)
+  notifications_visiblity_notifications_visiblity_notificationTonotification notifications_visiblity[] @relation("notifications_visiblity_notificationTonotification")
+}
+
+model notifications_visiblity {
+  id                                                              BigInt        @id @default(autoincrement())
+  notification                                                    BigInt?
+  target                                                          String?
+  requirement                                                     String?
+  notification_notifications_visiblity_notificationTonotification notification? @relation("notifications_visiblity_notificationTonotification", fields: [notification], references: [id], onDelete: Cascade, map: "notification")
+}
+
+model rules {
+  id       BigInt    @id @default(autoincrement())
+  number   String?
+  name     String?
+  verified DateTime? @db.Timestamp(6)
+  file     String?
+}
+
+model books_category {
+  id    BigInt  @id @default(autoincrement())
+  name  String?
+  books books[]
+}
+
+model books {
+  id                 BigInt               @id @default(autoincrement())
+  image              String?
+  title              String?
+  description        String?
+  pageNumber         Int?                 @db.SmallInt
+  category           BigInt?
+  book_files         book_files[]
+  book_rating        book_rating[]
+  book_visiblity     book_visiblity[]
+  books_category     books_category?      @relation(fields: [category], references: [id], onDelete: Cascade, map: "category")
+  user_book_progress user_book_progress[]
+}
+
+model book_files {
+  id    BigInt  @id @default(autoincrement())
+  book  BigInt?
+  file  String?
+  books books?  @relation(fields: [book], references: [id], onDelete: Cascade, map: "book")
+}
+
+model book_rating {
+  id      BigInt  @id @default(autoincrement())
+  book    BigInt?
+  user    BigInt?
+  title   String?
+  content String?
+  rating  Int?    @db.SmallInt
+  books   books?  @relation(fields: [book], references: [id], onDelete: Cascade, map: "book")
+  users   users?  @relation(fields: [user], references: [id], onDelete: Cascade, map: "user")
+}
+
+model book_visiblity {
+  id          BigInt  @id @default(autoincrement())
+  book        BigInt?
+  target      String?
+  requirement BigInt?
+  books       books?  @relation(fields: [book], references: [id], onDelete: Cascade, map: "book")
+}
+
+model user_book_progress {
+  id         BigInt    @id @default(autoincrement())
+  user       BigInt?
+  book       BigInt?
+  progress   BigInt?
+  completed  Boolean?
+  created_at DateTime? @db.Timestamp(6)
+  updated_at DateTime? @db.Timestamp(6)
+  books      books?    @relation(fields: [book], references: [id], onDelete: Cascade, map: "book")
+  users      users?    @relation(fields: [user], references: [id], onDelete: Cascade, map: "user")
+}
+
+model news_visiblity {
+  id                             BigInt  @id @default(autoincrement())
+  news                           BigInt?
+  target                         String?
+  requirement                    String?
+  news_news_visiblity_newsTonews news?   @relation("news_visiblity_newsTonews", fields: [news], references: [id], onDelete: Cascade, map: "news")
+}
+
+model angilal_surgalt {
+  id           BigInt  @id @default(autoincrement())
+  category     String?
+  sub_category String?
+  city         String?
+  district     String?
+  gender       String?
+  age          String?
+  personNumber BigInt?
+}
